@@ -8,7 +8,6 @@ var damage = 5
 var base_wait_time
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	base_wait_time = $Timer.wait_time
 	$Timer.timeout.connect(on_timer_timeout)
