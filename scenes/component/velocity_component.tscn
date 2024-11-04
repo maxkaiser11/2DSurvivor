@@ -4,3 +4,4 @@
 
 [node name="VelocityComponent" type="Node"]
 script = ExtResource("1_td4sm")
+acceleration = 20.0
