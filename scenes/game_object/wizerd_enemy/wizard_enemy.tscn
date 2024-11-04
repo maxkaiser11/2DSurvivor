@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://du7w7g5iybs7"]
+[gd_scene load_steps=16 format=3 uid="uid://du7w7g5iybs7"]
 
 [ext_resource type="Texture2D" uid="uid://c0h25ve2eukdk" path="res://scenes/game_object/wizerd_enemy/wizard_enemy.png" id="1_ffydk"]
 [ext_resource type="Script" path="res://scenes/game_object/wizerd_enemy/wizard_enemy.gd" id="1_h4mef"]
@@ -7,6 +7,47 @@
 [ext_resource type="PackedScene" uid="uid://fyoiq5w4w7aa" path="res://scenes/component/velocity_component.tscn" id="2_hohbf"]
 [ext_resource type="PackedScene" uid="uid://cdquxjjymtpil" path="res://scenes/component/hurtbox_component.tscn" id="4_2ytig"]
 [ext_resource type="PackedScene" uid="uid://b77ihfa753n1v" path="res://scenes/component/vial_drop_component.tscn" id="4_nujy2"]
+[ext_resource type="PackedScene" uid="uid://bg116ap0kv0ny" path="res://scenes/component/hit_flash_component.tscn" id="5_a5hng"]
+[ext_resource type="Shader" path="res://scenes/component/hit_flash_component.gdshader" id="6_38nb3"]
+
+[sub_resource type="Animation" id="Animation_rrubu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/Sprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_72gxr"]
 resource_name = "walk"
@@ -67,50 +108,16 @@ tracks/3/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_rrubu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals/Sprite2D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals/Sprite2D:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Visuals/Sprite2D:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_goo1h"]
 _data = {
 "RESET": SubResource("Animation_rrubu"),
 "walk": SubResource("Animation_72gxr")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d60bq"]
+resource_local_to_scene = true
+shader = ExtResource("6_38nb3")
+shader_parameter/lerp_percent = null
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_r63yl"]
 radius = 8.0
@@ -138,6 +145,11 @@ health_component = NodePath("../HealthComponent")
 [node name="VelocityComponent" parent="." instance=ExtResource("2_hohbf")]
 max_speed = 60
 acceleration = 2.0
+
+[node name="HitFlashComponent" parent="." node_paths=PackedStringArray("health_component", "sprite") instance=ExtResource("5_a5hng")]
+health_component = NodePath("../HealthComponent")
+sprite = NodePath("../Visuals/Sprite2D")
+hit_flash_material = SubResource("ShaderMaterial_d60bq")
 
 [node name="DeathComponent" parent="." node_paths=PackedStringArray("health_component", "sprite") instance=ExtResource("2_hkbus")]
 health_component = NodePath("../HealthComponent")
