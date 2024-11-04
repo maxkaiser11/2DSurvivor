@@ -1,0 +1,51 @@
+[gd_scene load_steps=10 format=3 uid="uid://du7w7g5iybs7"]
+
+[ext_resource type="Texture2D" uid="uid://c0h25ve2eukdk" path="res://scenes/game_object/wizerd_enemy/wizard_enemy.png" id="1_ffydk"]
+[ext_resource type="Script" path="res://scenes/game_object/wizerd_enemy/wizard_enemy.gd" id="1_h4mef"]
+[ext_resource type="PackedScene" uid="uid://0dbp2ke841oi" path="res://scenes/component/health_component.tscn" id="1_kjejt"]
+[ext_resource type="PackedScene" uid="uid://c3sr8s8rtvcrc" path="res://scenes/component/death_component.tscn" id="2_hkbus"]
+[ext_resource type="PackedScene" uid="uid://fyoiq5w4w7aa" path="res://scenes/component/velocity_component.tscn" id="2_hohbf"]
+[ext_resource type="PackedScene" uid="uid://cdquxjjymtpil" path="res://scenes/component/hurtbox_component.tscn" id="4_2ytig"]
+[ext_resource type="PackedScene" uid="uid://b77ihfa753n1v" path="res://scenes/component/vial_drop_component.tscn" id="4_nujy2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r63yl"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ubi7g"]
+radius = 4.0
+
+[node name="WizardEnemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 8
+collision_mask = 9
+script = ExtResource("1_h4mef")
+
+[node name="HealthComponent" parent="." instance=ExtResource("1_kjejt")]
+max_health = 30.0
+
+[node name="VialDropComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_nujy2")]
+health_component = NodePath("../HealthComponent")
+
+[node name="VelocityComponent" parent="." instance=ExtResource("2_hohbf")]
+max_speed = 60
+acceleration = 2.0
+
+[node name="DeathComponent" parent="." node_paths=PackedStringArray("health_component", "sprite") instance=ExtResource("2_hkbus")]
+health_component = NodePath("../HealthComponent")
+sprite = NodePath("../Visuals/Sprite2D")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals"]
+texture = ExtResource("1_ffydk")
+offset = Vector2(0, -8)
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_2ytig")]
+position = Vector2(0, -7)
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_r63yl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_ubi7g")
