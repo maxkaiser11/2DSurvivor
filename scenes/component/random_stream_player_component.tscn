@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://bufo6w3kocf0v"]
+
+[ext_resource type="AudioStream" uid="uid://cxjinl0rw7kuj" path="res://assets/audio/click1.ogg" id="1_7wjgo"]
+[ext_resource type="AudioStream" uid="uid://c1i4c2fkywsxb" path="res://assets/audio/click2.ogg" id="2_dkelw"]
+[ext_resource type="AudioStream" uid="uid://bkywemoqstrb8" path="res://assets/audio/click3.ogg" id="3_d82dk"]
+[ext_resource type="AudioStream" uid="uid://ky4afmnhmkkl" path="res://assets/audio/click4.ogg" id="4_okf8f"]
+[ext_resource type="AudioStream" uid="uid://m3t0l8tl2a8b" path="res://assets/audio/click5.ogg" id="5_sfkeb"]
+
+[sub_resource type="GDScript" id="GDScript_84nlq"]
+script/source = "extends AudioStreamPlayer
+
+@export var streams: Array[AudioStream]
+@export var randomize_pitch = true
+@export var min_pitch = .9
+@export var max_pitch = 1.1
+
+func play_random():
+	if streams == null || streams.size() == 0:
+		return
+		
+	if randomize_pitch:
+		pitch_scale = randf_range(min_pitch, max_pitch)
+	else:
+		pitch_scale = 1
+		
+	stream = streams.pick_random()
+	play()
+"
+
+[node name="RandomStreamPlayerComponent" type="AudioStreamPlayer"]
+bus = &"sfx"
+script = SubResource("GDScript_84nlq")
+streams = Array[AudioStream]([ExtResource("1_7wjgo"), ExtResource("2_dkelw"), ExtResource("3_d82dk"), ExtResource("4_okf8f"), ExtResource("5_sfkeb")])
